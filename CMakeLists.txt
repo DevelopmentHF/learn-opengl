@@ -16,7 +16,7 @@ set(GLAD_INCLUDE_DIRS "/Users/henryfielding/Documents/glad/include")
 set(GLAD_LIBRARIES "/Users/henryfielding/Documents/glad/src")
 
 
-add_executable(learn_opengl main.cpp glad.c
+add_executable(learn_opengl src/main.cpp src/glad.c
 )
 
 # Include directories

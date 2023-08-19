@@ -3,6 +3,11 @@
 #include <iostream>
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+void processInput(GLFWwindow *window);
+
+/* Default screen size values */
+const unsigned int SCR_HEIGHT = 600;
+const unsigned int SCR_WIDTH = 800;
 
 int main() {
 
@@ -14,7 +19,7 @@ int main() {
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // macOS specific apparently?
 
     /* create window object */
-    GLFWwindow* window = glfwCreateWindow(800, 600, "Learn-OpenGL", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Learn-OpenGL", NULL, NULL);
     if (window == NULL) {
         std::cout << "Failed to create GLFW window" << std::endl;
         glfwTerminate();
@@ -36,6 +41,14 @@ int main() {
 
     /* window loop */
     while(!glfwWindowShouldClose(window)) {
+        // input
+        processInput(window);
+
+        // rendering
+        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);   // greenish
+        glClear(GL_COLOR_BUFFER_BIT);   // clear colour buffer
+
+        // check and call events + swap buffers
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
@@ -46,4 +59,10 @@ int main() {
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
+}
+
+void processInput(GLFWwindow *window) {
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+        glfwSetWindowShouldClose(window, true);
+    }
 }

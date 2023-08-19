@@ -1,9 +1,15 @@
 # ninja log v5
-0	308	1692458389013875056	CMakeFiles/learn_opengl.dir/src/main.cpp.o	38429cbae518a2ca
-0	46	1692458858258598683	build.ninja	e00eb8ec0bb5c3e4
-430	480	1692457275904451091	learn_opengl	f0784da3be38242b
-0	148	1692458388854710359	CMakeFiles/learn_opengl.dir/src/windowResize.cpp.o	9efc84e809afa9a7
 5	407	1692458711749462241	CMakeFiles/learn_opengl.dir/main.cpp.o	8d6f49ea0dc9a358
-1	54	1692458858258598683	build.ninja	e00eb8ec0bb5c3e4
+0	148	1692458388854710359	CMakeFiles/learn_opengl.dir/src/windowResize.cpp.o	9efc84e809afa9a7
 10	264	1692458858527962337	CMakeFiles/learn_opengl.dir/glad.c.o	c52738778bcf85ac
 264	308	1692458858573342682	learn_opengl	5a70c680c863f3ef
+1	54	1692458986762960362	build.ninja	e00eb8ec0bb5c3e4
+0	308	1692458389013875056	CMakeFiles/learn_opengl.dir/src/main.cpp.o	38429cbae518a2ca
+0	56	1692458986762960362	build.ninja	e00eb8ec0bb5c3e4
+0	250	1692458987018307277	CMakeFiles/learn_opengl.dir/src/glad.c.o	7bfb619e689f52dd
+0	364	1692458987132267083	CMakeFiles/learn_opengl.dir/src/main.cpp.o	38429cbae518a2ca
+364	404	1692458987174835889	learn_opengl	31627719bd93e20b
+11	445	1692459324927583487	CMakeFiles/learn_opengl.dir/src/main.cpp.o	38429cbae518a2ca
+445	487	1692459324972464908	learn_opengl	31627719bd93e20b
+5	334	1692459350567742334	CMakeFiles/learn_opengl.dir/src/main.cpp.o	38429cbae518a2ca
+334	373	1692459350608905037	learn_opengl	31627719bd93e20b

@@ -49,19 +49,19 @@ cmake_ninja_workdir = /Users/henryfielding/Documents/repos/learn-opengl/cmake-bu
 
 build cmake_object_order_depends_target_learn_opengl: phony || CMakeFiles/learn_opengl.dir
 
-build CMakeFiles/learn_opengl.dir/main.cpp.o: CXX_COMPILER__learn_opengl_unscanned_Debug /Users/henryfielding/Documents/repos/learn-opengl/main.cpp || cmake_object_order_depends_target_learn_opengl
-  DEP_FILE = CMakeFiles/learn_opengl.dir/main.cpp.o.d
+build CMakeFiles/learn_opengl.dir/src/main.cpp.o: CXX_COMPILER__learn_opengl_unscanned_Debug /Users/henryfielding/Documents/repos/learn-opengl/src/main.cpp || cmake_object_order_depends_target_learn_opengl
+  DEP_FILE = CMakeFiles/learn_opengl.dir/src/main.cpp.o.d
   FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk -fcolor-diagnostics
   INCLUDES = -F/Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk/System/Library/Frameworks -I/opt/homebrew/Cellar/glew/2.2.0_1/include -I/opt/homebrew/Cellar/glfw/3.3.8/include -I/Users/henryfielding/Documents/glad/include
   OBJECT_DIR = CMakeFiles/learn_opengl.dir
-  OBJECT_FILE_DIR = CMakeFiles/learn_opengl.dir
+  OBJECT_FILE_DIR = CMakeFiles/learn_opengl.dir/src
 
-build CMakeFiles/learn_opengl.dir/glad.c.o: C_COMPILER__learn_opengl_unscanned_Debug /Users/henryfielding/Documents/repos/learn-opengl/glad.c || cmake_object_order_depends_target_learn_opengl
-  DEP_FILE = CMakeFiles/learn_opengl.dir/glad.c.o.d
+build CMakeFiles/learn_opengl.dir/src/glad.c.o: C_COMPILER__learn_opengl_unscanned_Debug /Users/henryfielding/Documents/repos/learn-opengl/src/glad.c || cmake_object_order_depends_target_learn_opengl
+  DEP_FILE = CMakeFiles/learn_opengl.dir/src/glad.c.o.d
   FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk -fcolor-diagnostics
   INCLUDES = -F/Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk/System/Library/Frameworks -I/opt/homebrew/Cellar/glew/2.2.0_1/include -I/opt/homebrew/Cellar/glfw/3.3.8/include -I/Users/henryfielding/Documents/glad/include
   OBJECT_DIR = CMakeFiles/learn_opengl.dir
-  OBJECT_FILE_DIR = CMakeFiles/learn_opengl.dir
+  OBJECT_FILE_DIR = CMakeFiles/learn_opengl.dir/src
 
 
 # =============================================================================
@@ -71,7 +71,7 @@ build CMakeFiles/learn_opengl.dir/glad.c.o: C_COMPILER__learn_opengl_unscanned_D
 #############################################
 # Link the executable learn_opengl
 
-build learn_opengl: CXX_EXECUTABLE_LINKER__learn_opengl_Debug CMakeFiles/learn_opengl.dir/main.cpp.o CMakeFiles/learn_opengl.dir/glad.c.o | /opt/homebrew/Cellar/glew/2.2.0_1/lib/libGLEW.dylib /opt/homebrew/Cellar/glfw/3.3.8/lib/libglfw.dylib
+build learn_opengl: CXX_EXECUTABLE_LINKER__learn_opengl_Debug CMakeFiles/learn_opengl.dir/src/main.cpp.o CMakeFiles/learn_opengl.dir/src/glad.c.o | /opt/homebrew/Cellar/glew/2.2.0_1/lib/libGLEW.dylib /opt/homebrew/Cellar/glfw/3.3.8/lib/libglfw.dylib
   FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk
   LINK_LIBRARIES = -Xlinker -framework -Xlinker OpenGL  -Xlinker -framework -Xlinker OpenGL  /opt/homebrew/Cellar/glew/2.2.0_1/lib/libGLEW.dylib  /opt/homebrew/Cellar/glfw/3.3.8/lib/libglfw.dylib  -framework OpenGL
   OBJECT_DIR = CMakeFiles/learn_opengl.dir
