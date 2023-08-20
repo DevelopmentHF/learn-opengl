@@ -111,11 +111,22 @@ int main() {
 //    };
 
     /* none overlapping vertices like above */
+//    float vertices[] = {
+//            0.5f,  0.5f, 0.0f,  // top right
+//            0.5f, -0.5f, 0.0f,  // bottom right
+//            -0.5f, -0.5f, 0.0f,  // bottom left
+//            -0.5f,  0.5f, 0.0f   // top left
+//    };
+
     float vertices[] = {
-            0.5f,  0.5f, 0.0f,  // top right
-            0.5f, -0.5f, 0.0f,  // bottom right
-            -0.5f, -0.5f, 0.0f,  // bottom left
-            -0.5f,  0.5f, 0.0f   // top left
+            // left triangle
+            -0.2f, 0.0f, 0.0f,
+            -0.8f, 0.0f, 0.0f,
+            -0.5f, 0.5f, 0.0f,
+            // second triangle
+            0.2f, 0.0f, 0.0f,
+            0.8f, 0.0f, 0.0f,
+            0.5f, -0.5f, 0.0f,
     };
 
     unsigned int indices[] = {
@@ -157,8 +168,8 @@ int main() {
         glUseProgram(shaderProgram);
         glBindVertexArray(VAO);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-        // glDrawArrays(GL_TRIANGLES, 0 ,3);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        glDrawArrays(GL_TRIANGLES, 0 ,6);
+//        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         // unbind buffers
         glBindVertexArray(0);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
