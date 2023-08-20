@@ -1,6 +1,7 @@
 #include <glad/glad.h>  // GLAD helper library for OpenGL function pointer help
 #include <GLFW/glfw3.h> // GLFW helper library for window management
 #include <iostream>
+#include "shaders/ShaderReader.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
@@ -9,25 +10,9 @@ void processInput(GLFWwindow *window);
 const unsigned int SCR_HEIGHT = 600;
 const unsigned int SCR_WIDTH = 800;
 
-/* Basic shader code ported */
-const char *vertexShaderSource = "#version 330 core\n"
-                                 "layout (location = 0) in vec3 aPos;\n"
-                                 "void main()\n"
-                                 "{\n"
-                                 "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-                                 "}\0";
-const char *fragmentShaderSource = "#version 330 core\n"
-                                   "out vec4 FragColor;\n"
-                                   "void main()\n"
-                                   "{\n"
-                                   "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-                                   "}\n\0";
-const char *fragmentShaderSourceDifferent = "#version 330 core\n"
-                                            "out vec4 FragColor;\n"
-                                            "void main()\n"
-                                            "{\n"
-                                            "   FragColor = vec4(1.0f, 0.3f, 0.6f, 1.0f);\n"
-                                            "}\n\0";
+/* Read in shader code */
+std::string vertexShaderSourceStr = ShaderReader::readShaderToString("shaders/vertexShading.glsl");
+std::string fragmentShaderSourceStr = ShaderReader::readShaderToString("shaders/fragmentShading.glsl");
 
 int main() {
 
@@ -60,25 +45,27 @@ int main() {
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
     /* create shader object */
-    unsigned int vertexShader, fragmentShader, fragShaderDiff;
+    unsigned int vertexShader, fragmentShader;
     vertexShader = glCreateShader(GL_VERTEX_SHADER);
     fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    fragShaderDiff = glCreateShader(GL_FRAGMENT_SHADER);
+
+    /* make shader code able to be referenced by a pointer */
+    const char* vertexShaderSource = vertexShaderSourceStr.c_str();
+    const char* fragmentShaderSource = fragmentShaderSourceStr.c_str();
 
     /* attach shader source code to shader object and compile it */
     glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
     glCompileShader(vertexShader);
     glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
     glCompileShader(fragmentShader);
-    glShaderSource(fragShaderDiff, 1, &fragmentShaderSourceDifferent, NULL);
-    glCompileShader(fragShaderDiff);
+
 
     /* check for shader compilation errors */
     int vertexSuccess, fragmentSuccess, fragDiffSuccess;
     char infoLog[512];
     glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &vertexSuccess);
     glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &fragmentSuccess);
-    glGetShaderiv(fragShaderDiff, GL_COMPILE_STATUS, &fragDiffSuccess);
+
     if (!vertexSuccess) {
         glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
         std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
@@ -86,26 +73,20 @@ int main() {
     if (!fragmentSuccess) {
         glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
         std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
-    }if (!fragDiffSuccess) {
-        glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
     }
 
     /* link our shaders into a shader program */
-    unsigned int shaderProgram, shaderProgramDiff;
+    unsigned int shaderProgram;
     shaderProgram = glCreateProgram();
-    shaderProgramDiff = glCreateProgram();
+
     glAttachShader(shaderProgram, vertexShader);
-    glAttachShader(shaderProgramDiff, vertexShader);
     glAttachShader(shaderProgram, fragmentShader);
-    glAttachShader(shaderProgramDiff, fragShaderDiff);
     glLinkProgram(shaderProgram);
-    glLinkProgram(shaderProgramDiff);
 
     /* check for shader linking failure */
     int linkSuccess;
     glGetProgramiv(shaderProgram, GL_LINK_STATUS, &linkSuccess);
-    glGetProgramiv(shaderProgramDiff, GL_LINK_STATUS, &linkSuccess);
+
     if (!linkSuccess) {
         glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
         std::cout << "ERROR::SHADER::LINKING_FAILED\n" << infoLog << std::endl;
@@ -114,29 +95,9 @@ int main() {
     /* no longer need shader objects, delete them */
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
-    glDeleteShader(fragShaderDiff);
 
     /* Define x,y,z positions of each vertex on our triangle.
        Normalised device coords -> always between -1 and 1 */
-//    float vertices[] = {
-//            // first triangle
-//            -0.5f, -0.5f, 0.0f, // top right
-//            0.5f, -0.5f, 0.0f,  // bot right
-//            0.0f, 0.5f, 0.0f,   // top left
-//            // second triangle
-//            0.5f, -0.5f, 0.0f,  // bot right
-//            -0.5f, -0.5f, 0.0f, // bot left
-//            -0.5f, 0.5f, 0.0f   // top left
-//    };
-
-    /* none overlapping vertices like above */
-//    float vertices[] = {
-//            0.5f,  0.5f, 0.0f,  // top right
-//            0.5f, -0.5f, 0.0f,  // bottom right
-//            -0.5f, -0.5f, 0.0f,  // bottom left
-//            -0.5f,  0.5f, 0.0f   // top left
-//    };
-
     float firstTriangle[] = {
             -0.2f, 0.0f, 0.0f,
             -0.8f, 0.0f, 0.0f,
@@ -207,7 +168,6 @@ int main() {
 //        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
         /* second triangle render */
-        glUseProgram(shaderProgramDiff);
         glBindVertexArray(VAOs[1]);
         glDrawArrays(GL_TRIANGLES, 0, 3);
 

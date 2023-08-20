@@ -8,6 +8,7 @@ find_package(SDL2 REQUIRED)
 find_package(OpenGL REQUIRED)
 
 # Set the paths for GLEW and GLFW
+set(CMAKE_CXX_STANDARD 17)
 set(GLEW_INCLUDE_DIRS "/opt/homebrew/Cellar/glew/2.2.0_1/include")
 set(GLEW_LIBRARIES "/opt/homebrew/Cellar/glew/2.2.0_1/lib/libGLEW.dylib")
 set(GLFW_INCLUDE_DIRS "/opt/homebrew/Cellar/glfw/3.3.8/include")
@@ -17,6 +18,8 @@ set(GLAD_LIBRARIES "/Users/henryfielding/Documents/glad/src")
 
 
 add_executable(learn_opengl src/main.cpp src/glad.c
+        src/shaders/ShaderReader.cpp
+        src/shaders/ShaderReader.h
 )
 
 # Include directories
