@@ -1,3 +1,0 @@
-/Users/henryfielding/Documents/repos/learn-opengl/cmake-build-debug/CMakeFiles/learn_opengl.dir
-/Users/henryfielding/Documents/repos/learn-opengl/cmake-build-debug/CMakeFiles/edit_cache.dir
-/Users/henryfielding/Documents/repos/learn-opengl/cmake-build-debug/CMakeFiles/rebuild_cache.dir

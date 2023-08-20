@@ -124,6 +124,10 @@ int main() {
     };
 
     /* generate a vertex objects and bind them */
+
+    /*  VBO holds the actual vertex data.
+        VAO keeps track of how to use the vertex data from a VBO.
+        EBO specifies the order in which the vertices should be connected to form shapes. */
     unsigned int VBO, VAO, EBO;
     glGenBuffers(1, &VBO);  // only want to generate `1` buffer
     glBindBuffer(GL_ARRAY_BUFFER, VBO); // any calls to GL_ARRAY_BUFFER target configure VBO
