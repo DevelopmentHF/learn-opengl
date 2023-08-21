@@ -20,6 +20,8 @@ set(GLAD_LIBRARIES "/Users/henryfielding/Documents/glad/src")
 add_executable(learn_opengl src/main.cpp src/glad.c
         src/shaders/ShaderReader.cpp
         src/shaders/ShaderReader.h
+        src/shaders/Shader.cpp
+        src/shaders/Shader.h
 )
 
 # Include directories
