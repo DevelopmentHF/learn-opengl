@@ -21,9 +21,9 @@ public:
     void use();
 
     // utility uniform functions
-    void setBool(const std::string &name, bool value);
-    void setInt(const std::string &name, int value);
-    void setFloat(const std::string &name, float value);
+    void setUniformBool(const std::string &name, bool value);
+    void setUniformInt(const std::string &name, int value);
+    void setUniformFloat(const std::string &name, float value);
     void setUniform4f(const std::string &name, float v0, float v1, float v2, float v3);
 
     // retrieve program id

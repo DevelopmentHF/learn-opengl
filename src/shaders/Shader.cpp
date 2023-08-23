@@ -64,14 +64,14 @@ void Shader::use() {
     glUseProgram(ID);
 }
 
-void Shader::setBool(const std::string &name, bool value)  {
+void Shader::setUniformBool(const std::string &name, bool value)  {
     glUniform1i(glGetUniformLocation(ID, name.c_str()), value);
 }
 
-void Shader::setInt(const std::string &name, int value) {
+void Shader::setUniformInt(const std::string &name, int value) {
     glUniform1i(glGetUniformLocation(ID, name.c_str()), value);
 }
-void Shader::setFloat(const std::string &name, float value) {
+void Shader::setUniformFloat(const std::string &name, float value) {
     glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
 }
 

@@ -91,9 +91,7 @@ int main() {
 
         shader.use();
 
-        float timeValue = glfwGetTime();
-        float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
-        shader.setUniform4f("ourColor", 0.0f, greenValue, 0.0f, 1.0f);
+        shader.setUniformFloat("aOffset", 0.5f);
 
         /* draw triangle */
         glBindVertexArray(VAOs[0]);
