@@ -54,6 +54,7 @@ int main() {
             0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f    // top
     };
 
+
     /*  VBO holds the actual vertex data.
         VAO keeps track of how to use the vertex data from a VBO.
         EBO specifies the order in which the vertices should be connected to form shapes. */
@@ -90,8 +91,6 @@ int main() {
         glClear(GL_COLOR_BUFFER_BIT);   // clear colour buffer
 
         shader.use();
-
-        shader.setUniformFloat("aOffset", 0.5f);
 
         /* draw triangle */
         glBindVertexArray(VAOs[0]);
