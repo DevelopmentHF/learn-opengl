@@ -42,6 +42,8 @@ int main() {
 
     /* Set up our shader */
     Shader shader("shaders/vertexShading.glsl", "shaders/fragmentShading.glsl");
+//    Shader shader("/Users/henryfielding/Documents/repos/learn-opengl/src/shaders/vertexShading.glsl",
+//           "/Users/henryfielding/Documents/repos/learn-opengl/src/shaders/fragmentShading.glsl");
 
     /* Define x,y,z positions of each vertex on our triangle.
        Normalised device coords -> always between -1 and 1 */
