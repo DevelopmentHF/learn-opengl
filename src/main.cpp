@@ -2,6 +2,10 @@
 #include <GLFW/glfw3.h> // GLFW helper library for window management
 #include <iostream>
 #include "shaders/Shader.h"
+#include "Textures/Texture.h"
+#define STB_IMAGE_IMPLEMENTATION
+#include "ext/stb_image.h"
+
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
@@ -42,16 +46,18 @@ int main() {
 
     /* Set up our shader */
     Shader shader("shaders/vertexShading.glsl", "shaders/fragmentShading.glsl");
-//    Shader shader("/Users/henryfielding/Documents/repos/learn-opengl/src/shaders/vertexShading.glsl",
-//           "/Users/henryfielding/Documents/repos/learn-opengl/src/shaders/fragmentShading.glsl");
 
-    /* Define x,y,z positions of each vertex on our triangle.
+    /* Set up our texture */
+    Texture texture("../res/container.jpg");
+
+    /* Define x,y,z positions of each vertex on our vertices.
        Normalised device coords -> always between -1 and 1 */
-    float triangle[] = {
-            // positions         // colors
-            0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,   // bottom right
-            -0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,   // bottom left
-            0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f    // top
+    float vertices[] = {
+            // positions          // colors           // texture coords
+            0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
+            0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
+            -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
+            -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left
     };
 
 
@@ -62,22 +68,28 @@ int main() {
     glGenBuffers(2, VBOs);
     glGenVertexArrays(2, VAOs);
 
-    /* triangle data */
+    /* vertices data */
     glBindBuffer(GL_ARRAY_BUFFER, VBOs[0]);
     glBindVertexArray(VAOs[0]);
 
     /* copy vertex data into the buffer's memory */
     /* static draw since data is set once and used many times. Use dynamic if the data changes a lot */
-    glBufferData(GL_ARRAY_BUFFER, sizeof(triangle), triangle, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
     /* how we should interpret vertex data per vertex attribute */
     // position attr
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);   // we set location as 0 in our shader code
     // color attr
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3*sizeof(float)));   // offset of size 3 floats
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3*sizeof(float)));   // offset of size 3 floats
     glEnableVertexAttribArray(1);   // we set location as 1 in our shader code
+    // texture attr
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6*sizeof(float)));
+    glEnableVertexAttribArray(2);
 
+
+    shader.use();
+    shader.setUniformInt("ourTexture", 0);
 
 
     /* window loop */
@@ -85,16 +97,20 @@ int main() {
         // input -------------------------------------------------------------------------------------------------------
         processInput(window);
 
-
         // rendering ---------------------------------------------------------------------------------------------------
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);   // greenish
         glClear(GL_COLOR_BUFFER_BIT);   // clear colour buffer
 
+        /* bind texture data */
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texture.getID());
+
+
         shader.use();
 
-        /* draw triangle */
+        /* draw vertices */
         glBindVertexArray(VAOs[0]);
-        glDrawArrays(GL_TRIANGLES, 0 ,3);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 
         // unbind buffers ----------------------------------------------------------------------------------------------
@@ -104,6 +120,9 @@ int main() {
         // check and call events + swap buffers
         glfwSwapBuffers(window);
         glfwPollEvents();
+
+        GLenum error = glGetError();
+        std::cout << "OpenGL error: " << error << std::endl;
     }
 
     glfwTerminate();
