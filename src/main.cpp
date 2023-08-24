@@ -22,7 +22,7 @@ int main() {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // macOS specific apparently?
-    glfwWindowHint(GLFW_COCOA_RETINA_FRAMEBUFFER, GL_FALSE);
+    glfwWindowHint(GLFW_COCOA_RETINA_FRAMEBUFFER, GL_FALSE); // fixes macOS issue where window had to be interacted with for objects to center
 
     /* create window object */
     GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Learn-OpenGL", NULL, NULL);
@@ -61,17 +61,26 @@ int main() {
             -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left
     };
 
+    unsigned int indices[] = {
+            0, 1, 3,  // First triangle
+            1, 2, 3   // Second triangle
+    };
 
     /*  VBO holds the actual vertex data.
         VAO keeps track of how to use the vertex data from a VBO.
         EBO specifies the order in which the vertices should be connected to form shapes. */
-    unsigned int VBOs[2], VAOs[2];
-    glGenBuffers(2, VBOs);
-    glGenVertexArrays(2, VAOs);
+    unsigned int VBO, VAO, EBO;
+    glGenBuffers(1, &VBO);
+    glGenVertexArrays(1, &VAO);
+    glGenBuffers(1, &EBO);
 
     /* vertices data */
-    glBindBuffer(GL_ARRAY_BUFFER, VBOs[0]);
-    glBindVertexArray(VAOs[0]);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBindVertexArray(VAO);
+
+    // Bind the EBO and copy index data
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
     /* copy vertex data into the buffer's memory */
     /* static draw since data is set once and used many times. Use dynamic if the data changes a lot */
@@ -110,9 +119,8 @@ int main() {
         shader.use();
 
         /* draw vertices */
-        glBindVertexArray(VAOs[0]);
-//        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-        glDrawArrays(GL_TRIANGLES, 0, 6);
+        glBindVertexArray(VAO);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
         // unbind buffers ----------------------------------------------------------------------------------------------
         glBindVertexArray(0);
@@ -121,9 +129,6 @@ int main() {
         // check and call events + swap buffers
         glfwSwapBuffers(window);
         glfwPollEvents();
-
-        GLenum error = glGetError();
-        std::cout << "OpenGL error: " << error << std::endl;
     }
 
     glfwTerminate();
