@@ -49,7 +49,8 @@ int main() {
     Shader shader("shaders/vertexShading.glsl", "shaders/fragmentShading.glsl");
 
     /* Set up our texture */
-    Texture texture("../res/container.jpg");
+    Texture texture("../res/container.jpg", GL_RGB);
+    Texture texture2("../res/awesomeface.png", GL_RGBA);
 
     /* Define x,y,z positions of each vertex on our vertices.
        Normalised device coords -> always between -1 and 1 */
@@ -97,9 +98,10 @@ int main() {
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6*sizeof(float)));
     glEnableVertexAttribArray(2);
 
-
+    /* Set which samplers are correct */
     shader.use();
     shader.setUniformInt("ourTexture", 0);
+    shader.setUniformInt("ourTexture2", 1);
 
 
     /* window loop */
@@ -114,7 +116,8 @@ int main() {
         /* bind texture data */
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture.getID());
-
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, texture2.getID());
 
         shader.use();
 

@@ -4,7 +4,9 @@
 
 #include "Texture.h"
 
-Texture::Texture(const char* fp) {
+Texture::Texture(const char* fp, GLint format) {
+    /* prevents flipping */
+    stbi_set_flip_vertically_on_load(true);
     /* load in texture file and set values */
     data = stbi_load(fp, &width, &height, &numChannels, 0);
 
@@ -22,7 +24,7 @@ Texture::Texture(const char* fp) {
 
     /* ... actually generate the texture */
     if (data) {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
     } else {
         std::cerr << "FAILED TO LOAD TEXTURE" << std::endl;

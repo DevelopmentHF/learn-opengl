@@ -22,7 +22,7 @@ private:
     GLuint ID;
 public:
     /* build texture */
-    explicit Texture(const char* fp);
+    explicit Texture(const char* fp, GLint format);
     /* get the texture's id */
     unsigned int getID();
 };
