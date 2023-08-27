@@ -8,7 +8,7 @@
 
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-void processInput(GLFWwindow *window);
+void processInput(GLFWwindow *window, Shader shader);
 
 /* Default screen size values */
 const unsigned int SCR_HEIGHT = 600;
@@ -56,10 +56,10 @@ int main() {
        Normalised device coords -> always between -1 and 1 */
     float vertices[] = {
             // positions          // colors           // texture coords
-            0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   2.0f, 2.0f,   // top right
-            0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   2.0f, 0.0f,   // bottom right
+            0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
+            0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
             -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
-            -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 2.0f    // top left
+            -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left
     };
 
     unsigned int indices[] = {
@@ -107,7 +107,7 @@ int main() {
     /* window loop */
     while(!glfwWindowShouldClose(window)) {
         // input -------------------------------------------------------------------------------------------------------
-        processInput(window);
+        processInput(window, shader);
 
         // rendering ---------------------------------------------------------------------------------------------------
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);   // greenish
@@ -142,7 +142,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
 }
 
-void processInput(GLFWwindow *window) {
+void processInput(GLFWwindow *window, Shader shader) {
     /* ability to close window */
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, true);
@@ -153,5 +153,14 @@ void processInput(GLFWwindow *window) {
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     } else {
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    }
+
+    /* ability to change texture mix level via arrow keys */
+    if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
+        shader.use();
+//        std::cout << shader.getUniformFloat("mixValue") << std::endl;
+        shader.setUniformFloat("mixValue", shader.getUniformFloat("mixValue")+0.01f);
+    } else if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
+        shader.setUniformFloat("mixValue", shader.getUniformFloat("mixValue")-0.01f);
     }
 }

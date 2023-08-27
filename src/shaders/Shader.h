@@ -25,6 +25,7 @@ public:
     void setUniformInt(const std::string &name, int value);
     void setUniformFloat(const std::string &name, float value);
     void setUniform4f(const std::string &name, float v0, float v1, float v2, float v3);
+    float getUniformFloat(const std::string &name);
 
     // retrieve program id
     unsigned int getID();

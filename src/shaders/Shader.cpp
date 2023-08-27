@@ -79,6 +79,12 @@ void Shader::setUniform4f(const std::string &name, float v0, float v1, float v2,
     glUniform4f(glGetUniformLocation(ID, name.c_str()), v0, v1, v2, v3);
 }
 
+float Shader::getUniformFloat(const std::string &name) {
+    float value;
+    glGetUniformfv(ID, glGetUniformLocation(ID, name.c_str()), &value);
+    return value;
+}
+
 unsigned int Shader::getID() {
     return ID;
 }
