@@ -106,22 +106,23 @@ int main() {
     shader.setUniformInt("ourTexture", 0);
     shader.setUniformInt("ourTexture2", 1);
 
-    /* init transformation matrix */
-    glm::mat4 transformer = glm::mat4(1.0f);
-    /* rotation of our container -> around the z axis */
-    transformer = glm::rotate(transformer,
-                              glm::radians(90.0f),
-                              glm::vec3(0.0, 0.0, 1.0)); // should be a unit vector
-    /* scale factor */
-    transformer = glm::scale(transformer, glm::vec3(0.5, 0.5, 0.5));
-    /* change uniform matrix value */
-    shader.setUniformMat4fv("transform", transformer);
-
-
     /* window loop */
     while(!glfwWindowShouldClose(window)) {
         // input -------------------------------------------------------------------------------------------------------
         processInput(window, shader);
+
+        // calculations ------------------------------------------------------------------------------------------------
+        /* init transformation matrix */
+        glm::mat4 transformer = glm::mat4(1.0f);
+        /* translation of our container */
+        transformer = glm::translate(transformer, glm::vec3(0.5f, -0.5f, 0.0f));
+        /* rotate with respect to an angle that changes with time around the z axis */
+        transformer = glm::rotate(transformer,
+                                  (float)glfwGetTime(),
+                                  glm::vec3(0.0f, 0.0f, 1.0f));
+        /* change uniform matrix value */
+        shader.setUniformMat4fv("transform", transformer);
+
 
         // rendering ---------------------------------------------------------------------------------------------------
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);   // greenish
