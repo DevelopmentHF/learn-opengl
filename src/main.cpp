@@ -5,6 +5,9 @@
 #include "Textures/Texture.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "ext/stb_image.h"
+#include "ext/glm/glm.hpp"
+#include "ext/glm/gtc/matrix_transform.hpp"
+#include "ext/glm/gtc/type_ptr.hpp"
 
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -102,6 +105,13 @@ int main() {
     shader.use();
     shader.setUniformInt("ourTexture", 0);
     shader.setUniformInt("ourTexture2", 1);
+
+    /* glm testing */
+    glm::vec4 vec(1.0f, 0.0f, 0.0f, 1.0f);  // define base vector (1,0,0)
+    glm::mat4 transition = glm::mat4(1.0f);     // define identify matrix
+    transition = glm::translate(transition, glm::vec3(1.0f, 1.0f, 0.0f));   // translate iden matrix
+    vec = transition * vec;     // vector multiplication
+    std::cout << vec.x << vec.y << vec.z << std::endl;
 
 
     /* window loop */
