@@ -106,12 +106,17 @@ int main() {
     shader.setUniformInt("ourTexture", 0);
     shader.setUniformInt("ourTexture2", 1);
 
-    /* glm testing */
-    glm::vec4 vec(1.0f, 0.0f, 0.0f, 1.0f);  // define base vector (1,0,0)
-    glm::mat4 transition = glm::mat4(1.0f);     // define identify matrix
-    transition = glm::translate(transition, glm::vec3(1.0f, 1.0f, 0.0f));   // translate iden matrix
-    vec = transition * vec;     // vector multiplication
-    std::cout << vec.x << vec.y << vec.z << std::endl;
+    /* init transformation matrix */
+    glm::mat4 transformer = glm::mat4(1.0f);
+    /* rotation of our container -> around the z axis */
+    transformer = glm::rotate(transformer,
+                              glm::radians(90.0f),
+                              glm::vec3(0.0, 0.0, 1.0)); // should be a unit vector
+    /* scale factor */
+    transformer = glm::scale(transformer, glm::vec3(0.5, 0.5, 0.5));
+    /* get the uniform transform and change its value, the old-fashioned way with no Shader::Util method written yet */
+    GLint transformLoc = glGetUniformLocation(shader.getID(), "transform");
+    glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transformer));
 
 
     /* window loop */

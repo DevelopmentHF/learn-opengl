@@ -8,6 +8,9 @@
 #include <string>
 #include <glad/glad.h>
 #include "ShaderReader.h"
+#include "../ext/glm/glm.hpp"
+#include "../ext/glm/gtc/matrix_transform.hpp"
+#include "../ext/glm/gtc/type_ptr.hpp"
 
 class Shader {
 private:
