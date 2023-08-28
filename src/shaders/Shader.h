@@ -29,6 +29,7 @@ public:
     void setUniformFloat(const std::string &name, float value);
     void setUniform4f(const std::string &name, float v0, float v1, float v2, float v3);
     float getUniformFloat(const std::string &name);
+    void setUniformMat4fv(const std::string &name, glm::mat4 matrix);
 
     // retrieve program id
     unsigned int getID();

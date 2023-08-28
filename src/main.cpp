@@ -114,9 +114,8 @@ int main() {
                               glm::vec3(0.0, 0.0, 1.0)); // should be a unit vector
     /* scale factor */
     transformer = glm::scale(transformer, glm::vec3(0.5, 0.5, 0.5));
-    /* get the uniform transform and change its value, the old-fashioned way with no Shader::Util method written yet */
-    GLint transformLoc = glGetUniformLocation(shader.getID(), "transform");
-    glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transformer));
+    /* change uniform matrix value */
+    shader.setUniformMat4fv("transform", transformer);
 
 
     /* window loop */
