@@ -152,16 +152,11 @@ int main() {
     glm::mat4 view = glm::mat4(1.0f);
     view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
 
-    /* proj matrix -> creates a frustrum */
-    glm::mat4 projection = glm::mat4(1.0f);
-    projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH/(float)SCR_HEIGHT, 0.1f, 100.0f);
-
     /* Set which samplers are correct */
     shader.use();
     shader.setUniformInt("ourTexture", 0);
     shader.setUniformInt("ourTexture2", 1);
     shader.setUniformMat4fv("view", view);
-    shader.setUniformMat4fv("projection", projection);
 
     /* window loop */
     while(!glfwWindowShouldClose(window)) {
@@ -189,7 +184,14 @@ int main() {
             model = glm::translate(model, cubePositions[i]);
             float angle = (float)glfwGetTime() * (i + 5.0f);
             model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+
+            /* proj matrix -> creates a frustrum */
+            glm::mat4 projection = glm::mat4(1.0f);
+            projection = glm::perspective(glm::radians(abs((float)sin(glfwGetTime())) * 50.0f), (float)SCR_WIDTH/(float)SCR_HEIGHT, 0.1f, 100.0f);
+
+            shader.setUniformMat4fv("projection", projection);
             shader.setUniformMat4fv("model", model);
+
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }
 
