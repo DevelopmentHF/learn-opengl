@@ -148,15 +148,21 @@ int main() {
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(2);
 
-    /* view matrix -> we want to move backwards, so translate the scene in the negative z direction (into the screen) */
-    glm::mat4 view = glm::mat4(1.0f);
-    view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+    /* init a camera position */
+    glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
+    glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
+    glm::vec3 cameraDirection = glm::normalize(cameraPos - cameraTarget);
+
+    /* get cameras other axis -> ez to get the up vector and use cross product to get orthogonal right */
+    glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f); // up vector of world space, not the camera
+    glm::vec3 cameraRight = glm::normalize(glm::cross(up, cameraDirection));
+    glm::vec3 cameraUp = glm::cross(cameraDirection, cameraRight);  // we have done the gram schmidt procedure
+
 
     /* Set which samplers are correct */
     shader.use();
     shader.setUniformInt("ourTexture", 0);
     shader.setUniformInt("ourTexture2", 1);
-    shader.setUniformMat4fv("view", view);
 
     /* window loop */
     while(!glfwWindowShouldClose(window)) {
@@ -187,13 +193,23 @@ int main() {
 
             /* proj matrix -> creates a frustrum */
             glm::mat4 projection = glm::mat4(1.0f);
-            projection = glm::perspective(glm::radians(abs((float)sin(glfwGetTime())) * 50.0f), (float)SCR_WIDTH/(float)SCR_HEIGHT, 0.1f, 100.0f);
+            projection = glm::perspective(glm::radians(50.0f), (float)SCR_WIDTH/(float)SCR_HEIGHT, 0.1f, 100.0f);
 
             shader.setUniformMat4fv("projection", projection);
             shader.setUniformMat4fv("model", model);
 
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }
+
+        const float radius = 10.0f;
+        float camX = sin(glfwGetTime()) * radius;
+        float camZ = cos(glfwGetTime()) * radius;
+        /* init a lookAt matrix -> transforms to our camera coords */
+        glm::mat4 view = glm::mat4(1.0f);
+        view = glm::lookAt(glm::vec3(camX, 0.0f, camZ),
+                           glm::vec3(0.0, 0.0, 0.0),
+                           glm::vec3(0.0, 1.0, 0.0));
+        shader.setUniformMat4fv("view", view);
 
 
         // unbind buffers ----------------------------------------------------------------------------------------------
