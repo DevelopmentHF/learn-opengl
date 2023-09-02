@@ -17,6 +17,11 @@ void processInput(GLFWwindow *window, Shader shader);
 const unsigned int SCR_HEIGHT = 600;
 const unsigned int SCR_WIDTH = 800;
 
+/* Starting camera details */
+glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
+glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
+
 int main() {
 
     /* configure window and set glfw/opengl settings */
@@ -148,17 +153,6 @@ int main() {
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(2);
 
-    /* init a camera position */
-    glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
-    glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
-    glm::vec3 cameraDirection = glm::normalize(cameraPos - cameraTarget);
-
-    /* get cameras other axis -> ez to get the up vector and use cross product to get orthogonal right */
-    glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f); // up vector of world space, not the camera
-    glm::vec3 cameraRight = glm::normalize(glm::cross(up, cameraDirection));
-    glm::vec3 cameraUp = glm::cross(cameraDirection, cameraRight);  // we have done the gram schmidt procedure
-
-
     /* Set which samplers are correct */
     shader.use();
     shader.setUniformInt("ourTexture", 0);
@@ -201,14 +195,11 @@ int main() {
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }
 
-        const float radius = 10.0f;
-        float camX = sin(glfwGetTime()) * radius;
-        float camZ = cos(glfwGetTime()) * radius;
         /* init a lookAt matrix -> transforms to our camera coords */
         glm::mat4 view = glm::mat4(1.0f);
-        view = glm::lookAt(glm::vec3(camX, 0.0f, camZ),
-                           glm::vec3(0.0, 0.0, 0.0),
-                           glm::vec3(0.0, 1.0, 0.0));
+        view = glm::lookAt(cameraPos,   // position
+                           cameraPos + cameraFront, // target
+                           cameraUp);   // up
         shader.setUniformMat4fv("view", view);
 
 
@@ -236,7 +227,7 @@ void processInput(GLFWwindow *window, Shader shader) {
     }
 
     /* ability to swap between fill and wireframe modes -> hold w key */
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+    if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS) {
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     } else {
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -245,9 +236,19 @@ void processInput(GLFWwindow *window, Shader shader) {
     /* ability to change texture mix level via arrow keys */
     if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
         shader.use();
-//        std::cout << shader.getUniformFloat("mixValue") << std::endl;
         shader.setUniformFloat("mixValue", shader.getUniformFloat("mixValue")+0.01f);
     } else if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
         shader.setUniformFloat("mixValue", shader.getUniformFloat("mixValue")-0.01f);
     }
+
+    /* camera shiz */
+    const float cameraSpeed = 0.05f;
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        cameraPos += cameraSpeed * cameraFront;
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        cameraPos -= cameraSpeed * cameraFront;
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+        cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+        cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
 }
